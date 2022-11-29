@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        const ROOM_ID = "<%= roomId %>"
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.42.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/views/Assets/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.1/iconify-icon.min.js"></script>
+    <script defer src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="script.js" defer></script>
+    <title>Arena | Class Room</title>
+    <style>
+        #video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            /* grid-template-columns: repeat(auto-fill, 400px); */
+            /* grid-auto-rows: 400px; */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 3px solid rgb(230, 224, 224);
+            border-radius: 10px;
+        }
+
+        .d-grid {
+            display: grid;
+            grid-template-columns: 1fr 11fr;
+        }
+
+        .chat-box {
+            /* height: calc(100vh - 7%); */
+            height: calc(100vh - 40px);
+            
+        }
+        .message-box {
+            height: calc(100vh - 93%);
+            max-height: 40px;
+        }
+        .drawer-toggle:checked.drawer-side>.drawer-overlay{
+            opacity: 1.0 !important;
+        }
+    </style>
+</head>
+
+<body class="bg-[linear-gradient(90deg,#56b5e3,#7d58a5)]">
+    <!-- Chat box -->
+    <div class="drawer drawer-end">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content h-screen flex items-center justify-center opacity-100">
+
+
+            <!-- =========================================== -->
+            <!-- <div class="alert shadow-lg">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span>we use cookies for no reason.</span>
+                </div>
+                <div class="flex-none">
+                  <button class="btn btn-sm btn-ghost">Deny</button>
+                  <button class="btn btn-sm btn-primary">Accept</button>
+                </div>
+              </div> -->
+            <!-- =========================================== -->
+
+
+            <!-- Page content here -->
+            <div id="video-grid"> </div>
+            <div class="absolute bottom-0 grid grid-cols-3 justify-between items-center w-full bg-[linear-gradient(90deg,#74adc9,#8b70a9)] py-2">
+                <div class="ml-3 flex justify-start gap-4">
+                    <iconify-icon id="audio" icon="ant-design:audio-outlined" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="audio-mute" icon="ant-design:audio-muted-outlined" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                    <!-- <iconify-icon id="video" icon="ph:video-camera-fill" class="bg-black text-white rounded-full text-2xl p-4"></iconify-icon> -->
+                    <iconify-icon id="video" icon="ion:videocam" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <!-- <iconify-icon id="video-mute" icon="ph:video-camera-slash-fill" class="bg-black text-white rounded-full text-2xl p-4 hidden"></iconify-icon> -->
+                    <iconify-icon id="video-mute" icon="ion:videocam-off" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                </div>
+                <div class="text-center flex justify-center gap-[40px]">
+                    <iconify-icon icon="fluent:people-team-32-filled" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <label for="my-drawer" class="drawer-button"><iconify-icon icon="mdi:message-reply" flip="horizontal" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon></label>
+                    <iconify-icon icon="teenyicons:screen-solid" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="record" icon="ph:record-fill" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="record-stop" icon="fluent:record-stop-32-filled" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                </div>
+                <div class="text-end mr-10">
+                    <button id="leave-btn" class="bg-red-700 text-white rounded-lg p-2">Leave Room</button>
+                </div>
+            </div>
+        </div>
+        <div class="drawer-side">
+            <label for="my-drawer" class="drawer-overlay"></label>
+            <ul class="menu w-80 bg-base-100 text-base-content">
+                <!-- Sidebar content here -->
+                <div class="p-3 chat-box">
+                    <div class="flex">
+                        <div class="avatar placeholder w-2/12 h-2/12">
+                            <div class="bg-neutral-focus text-neutral-content rounded-full w-24">
+                                <span class="text-xl">K</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h1>Person Name here</h1>
+                            <p>Lorem ipsum dolor sit amet . </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sticky bottom-0 border border-blue-300 flex items-center justify-between message-box">
+                    <input type="text" class="w-11/12 focus:outline-none pl-3" placeholder="Type your message here">
+                    <iconify-icon icon="carbon:send-filled"
+                        class="text-right w-1/12 text-blue-500 hover:cursor-pointer text-2xl"></iconify-icon>
+                </div>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
