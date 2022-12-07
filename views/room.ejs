@@ -111,28 +111,28 @@
         </div>
         <div class="drawer-side">
             <label for="my-drawer" class="drawer-overlay"></label>
-            <ul class="menu w-80 bg-base-100 text-base-content">
+            <div class="menu w-80 bg-base-100 text-base-content">
                 <!-- Sidebar content here -->
-                <div class="p-3 chat-box">
-                    <div class="flex">
+                <ul id="message-view-box" class="p-3 chat-box">
+                    <li class="flex">
                         <div class="avatar placeholder w-2/12 h-2/12">
                             <div class="bg-neutral-focus text-neutral-content rounded-full w-24">
-                                <span class="text-xl">K</span>
+                                <span class="text-xl">M</span>
                             </div>
                         </div>
                         <div>
                             <h1>Person Name here</h1>
                             <p>Lorem ipsum dolor sit amet . </p>
                         </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
 
-                <form class="sticky bottom-0 border border-blue-300 flex items-center justify-between message-box">
-                    <input type="text" class="w-11/12 focus:outline-none pl-3 h-full" placeholder="Type your message here">
-                    <button type="submit" class="w-1/12 hover:cursor-pointer"><iconify-icon icon="carbon:send-filled"
+                <form id="chat_box" class="sticky bottom-0 border border-blue-300 flex items-center justify-between message-box">
+                    <input id="chat_box_input" type="text" class="w-11/12 focus:outline-none pl-3 h-full" placeholder="Type your message here">
+                    <button type="submit" class="w-1/12 hover:cursor-pointer"><iconify-icon id="send-icon" icon="carbon:send-filled"
                         class="text-right text-blue-500 align-middle text-2xl"></iconify-icon></button>
                 </form>
-            </ul>
+            </div>
         </div>
     </div>
 </body>

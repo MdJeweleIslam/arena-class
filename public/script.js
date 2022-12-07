@@ -60,13 +60,14 @@ function addVideoStream(video, stream){
 
 //====================================== Front-end styling logics =================================
 
-let audio = document.getElementById('audio')
-let audio_mute = document.getElementById('audio-mute')
-let video = document.getElementById('video')
-let video_mute = document.getElementById('video-mute')
-let record = document.getElementById('record')
-let record_stop = document.getElementById('record-stop')
-let leave_btn = document.getElementById('leave-btn')
+const audio = document.getElementById('audio')
+const audio_mute = document.getElementById('audio-mute')
+const video = document.getElementById('video')
+const video_mute = document.getElementById('video-mute')
+const record = document.getElementById('record')
+const record_stop = document.getElementById('record-stop')
+const leave_btn = document.getElementById('leave-btn')
+const message_view_box = document.getElementById('message-view-box')
 
 audio.addEventListener('click', function(){
     audio.style.display = 'none';
@@ -93,5 +94,31 @@ record_stop.addEventListener('click', function(){
     record.style.display = 'inline-block';
 })
 leave_btn.addEventListener('click',function(){
-    alert("Ki khobor?")
+    alert("Do you really want to leave the room?")
 })
+
+
+
+// ============================= Chat box logics ===============================
+
+let chat_box = document.getElementById('chat_box');
+let chat_box_input = document.getElementById('chat_box_input');
+let send_icon = document.getElementById('send-icon');
+
+chat_box.addEventListener('submit',function(e){
+    e.preventDefault()
+    console.log(e.target.chat_box_input.value);
+    if (chat_box_input.value) {
+        socket.emit('chat message', chat_box_input.value);
+        chat_box_input.value = '';
+      }
+    // e.target.chat_box_input.value = ''
+})
+socket.on('chat message', function(msg) {
+    const item = document.createElement('li');
+    item.textContent = msg;
+    message_view_box.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+// =============================================================================
