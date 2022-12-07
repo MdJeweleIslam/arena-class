@@ -53,18 +53,29 @@
         .chat-box {
             /* height: calc(100vh - 7%); */
             height: calc(100vh - 40px);
-            
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+
         }
+
         .message-box {
             height: calc(100vh - 93%);
             max-height: 40px;
         }
-        .drawer-toggle:checked.drawer-side>.drawer-overlay{
+
+        .drawer-toggle:checked.drawer-side>.drawer-overlay {
             opacity: 1.0 !important;
         }
+
         /* .menu:where(i){
             flex-flow:row-wrap !important ;
         } */
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .chat-box::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
 
@@ -91,21 +102,33 @@
 
             <!-- Page content here -->
             <div id="video-grid"> </div>
-            <div class="absolute bottom-0 grid grid-cols-3 justify-between items-center w-full bg-[linear-gradient(90deg,#74adc9,#8b70a9)] py-2">
+            <div
+                class="absolute bottom-0 grid grid-cols-3 justify-between items-center w-full bg-[linear-gradient(90deg,#74adc9,#8b70a9)] py-2">
                 <div class="ml-3 flex justify-start gap-4">
-                    <iconify-icon id="audio" icon="ant-design:audio-outlined" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
-                    <iconify-icon id="audio-mute" icon="ant-design:audio-muted-outlined" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="audio" icon="ant-design:audio-outlined"
+                        class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="audio-mute" icon="ant-design:audio-muted-outlined"
+                        class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
                     <!-- <iconify-icon id="video" icon="ph:video-camera-fill" class="bg-black text-white rounded-full text-2xl p-4"></iconify-icon> -->
-                    <iconify-icon id="video" icon="ion:videocam" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="video" icon="ion:videocam"
+                        class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
                     <!-- <iconify-icon id="video-mute" icon="ph:video-camera-slash-fill" class="bg-black text-white rounded-full text-2xl p-4 hidden"></iconify-icon> -->
-                    <iconify-icon id="video-mute" icon="ion:videocam-off" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="video-mute" icon="ion:videocam-off"
+                        class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
                 </div>
                 <div class="text-center flex justify-center gap-[40px]">
-                    <iconify-icon icon="fluent:people-team-32-filled" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
-                    <label for="my-drawer" class="drawer-button"><iconify-icon icon="mdi:message-reply" flip="horizontal" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon></label>
-                    <iconify-icon icon="teenyicons:screen-solid" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
-                    <iconify-icon id="record" icon="ph:record-fill" class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
-                    <iconify-icon id="record-stop" icon="fluent:record-stop-32-filled" class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon icon="fluent:people-team-32-filled"
+                        class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <label for="my-drawer" class="drawer-button">
+                        <iconify-icon icon="mdi:message-reply" flip="horizontal"
+                            class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    </label>
+                    <iconify-icon id="screen-share" icon="teenyicons:screen-solid"
+                        class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="record" icon="ph:record-fill"
+                        class="text-white rounded-full text-2xl hover:cursor-pointer"></iconify-icon>
+                    <iconify-icon id="record-stop" icon="fluent:record-stop-32-filled"
+                        class="text-white rounded-full text-2xl hidden hover:cursor-pointer"></iconify-icon>
                 </div>
                 <div class="text-end mr-10">
                     <button id="leave-btn" class="bg-red-700 text-white rounded-lg p-2">Leave Room</button>
@@ -117,6 +140,7 @@
             <div class="w-80 bg-base-100 text-base-content">
                 <!-- Sidebar content here -->
                 <ul id="message-view-box" class="p-3 chat-box overflow-y-scroll">
+                    <h1 class="text-center font-bold border-b-2 border-blue-200">Chat</h1>
                     <!-- <li class="flex">
                         <div class="avatar placeholder ">
                             <div class="bg-neutral-focus text-neutral-content rounded-full w-12">
@@ -152,10 +176,14 @@
                     </li> -->
                 </ul>
 
-                <form id="chat_box" class="sticky bottom-0 border border-blue-300 flex items-center justify-between message-box">
-                    <input id="chat_box_input" type="text" class="w-11/12 focus:outline-none pl-3 h-full" placeholder="Type your message here">
-                    <button type="submit" class="w-1/12 hover:cursor-pointer"><iconify-icon id="send-icon" icon="carbon:send-filled"
-                        class="text-right text-blue-500 align-middle text-2xl"></iconify-icon></button>
+                <form id="chat_box"
+                    class="sticky bottom-0 border border-blue-300 flex items-center justify-between message-box">
+                    <input id="chat_box_input" type="text" class="w-11/12 focus:outline-none pl-3 h-full"
+                        placeholder="Type your message here">
+                    <button type="submit" class="w-1/12 hover:cursor-pointer">
+                        <iconify-icon id="send-icon" icon="carbon:send-filled"
+                            class="text-right text-blue-500 align-middle text-2xl"></iconify-icon>
+                    </button>
                 </form>
             </div>
         </div>
