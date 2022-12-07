@@ -107,7 +107,7 @@ let send_icon = document.getElementById('send-icon');
 
 chat_box.addEventListener('submit',function(e){
     e.preventDefault()
-    console.log(e.target.chat_box_input.value);
+    // console.log(e.target.chat_box_input.value);
     if (chat_box_input.value) {
         socket.emit('chat message', chat_box_input.value);
         chat_box_input.value = '';
@@ -118,7 +118,8 @@ socket.on('chat message', function(msg) {
     const item = document.createElement('li');
     item.textContent = msg;
     message_view_box.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
+    // window.scrollTo(0, document.body.scrollHeight || document.body.scrollTop);
+    message_view_box.scrollTop = message_view_box.scrollHeight - message_view_box.clientHeight;
   });
 
 // =============================================================================
