@@ -128,12 +128,6 @@ record_stop.addEventListener('click', function () {
     record_stop.style.display = 'none';
     record.style.display = 'inline-block';
 })
-/* screen_share.addEventListener('click', function () {
-    console.log('sharing screen')
-}) */
-leave_btn.addEventListener('click', function () {
-    alert("Do you really want to leave the room?")
-})
 
 
 
@@ -156,7 +150,6 @@ socket.on('chat message', function (msg) {
     const item = document.createElement('li');
     item.textContent = msg;
     message_view_box.appendChild(item);
-    // window.scrollTo(0, document.body.scrollHeight || document.body.scrollTop);
     message_view_box.scrollTop = message_view_box.scrollHeight - message_view_box.clientHeight;
 });
 
@@ -169,17 +162,18 @@ screen_share.addEventListener('click',async function () {
 })
 
 // Options for getDisplayMedia()
-
 const displayMediaOptions = {
     video: {
       cursor: "always"
     },
-    audio: false
+    audio: true
   };
 
   async function startCapture() {  
     try {
       videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    //   const videoStreamTrack = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    //   call.peerConnection.getSenders()[1].replaceTrack(videoStreamTrack)
       dumpOptionsInfo();
     } catch (err) {
       console.error(`Error: ${err}`);
