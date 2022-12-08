@@ -73,7 +73,8 @@ const leave_btn = document.getElementById('leave-btn')
 const message_view_box = document.getElementById('message-view-box')
 
 audio.addEventListener('click', function () {
-    const track = videoStream.getAudioTracks()[0].muted
+    const track = videoStream.getAudioTracks()[0].enabled
+    console.log(videoStream.getAudioTracks());
     if (track) {
         videoStream.getAudioTracks()[0].enabled = false
     }
@@ -84,7 +85,8 @@ audio.addEventListener('click', function () {
     audio_mute.style.display = 'inline-block';
 })
 audio_mute.addEventListener('click', function () {
-    const track = videoStream.getAudioTracks()[0].muted
+    const track = videoStream.getAudioTracks()[0].enabled
+    console.log(videoStream.getAudioTracks());
     if (track) {
         videoStream.getAudioTracks()[0].enabled = false
     }
@@ -126,9 +128,9 @@ record_stop.addEventListener('click', function () {
     record_stop.style.display = 'none';
     record.style.display = 'inline-block';
 })
-screen_share.addEventListener('click', function () {
+/* screen_share.addEventListener('click', function () {
     console.log('sharing screen')
-})
+}) */
 leave_btn.addEventListener('click', function () {
     alert("Do you really want to leave the room?")
 })
@@ -159,3 +161,16 @@ socket.on('chat message', function (msg) {
 });
 
 // =============================================================================
+
+//================================== Screen share logics =======================
+screen_share.addEventListener('click',async function (displayMediaOptions) {
+    console.log('sharing screen')
+    let captureStream = null;
+
+    try {
+      captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
+})
+//==============================================================================
