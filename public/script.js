@@ -163,14 +163,32 @@ socket.on('chat message', function (msg) {
 // =============================================================================
 
 //================================== Screen share logics =======================
-screen_share.addEventListener('click',async function (displayMediaOptions) {
-    console.log('sharing screen')
-    let captureStream = null;
+const videoElem = document.getElementById('screen')
+screen_share.addEventListener('click',async function () {
+    startCapture();
+})
 
+// Options for getDisplayMedia()
+
+const displayMediaOptions = {
+    video: {
+      cursor: "always"
+    },
+    audio: false
+  };
+
+  async function startCapture() {  
     try {
-      captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+      videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+      dumpOptionsInfo();
     } catch (err) {
       console.error(`Error: ${err}`);
     }
-})
+  }
+
+  function dumpOptionsInfo() {
+    const videoTrack = videoElem.srcObject.getVideoTracks()[0];
+  }
+  
+  
 //==============================================================================
