@@ -1,10 +1,11 @@
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 
-const myPeer = new Peer(undefined, {
+const myPeer = new Peer({
     host: '/',
     port: '8000'
 })
+// console.log(myPeer._events);
 const myVideo = document.createElement('video')
 myVideo.muted = true
 const peers = {}
@@ -98,7 +99,7 @@ audio_mute.addEventListener('click', function () {
 })
 video.addEventListener('click', function () {
     const track = videoStream.getVideoTracks()[0].enabled
-    console.log(videoStream.getVideoTracks()[0].enabled);
+    console.log(videoStream.getVideoTracks()[0]);
     if (track) {
         videoStream.getVideoTracks()[0].enabled = false
     }
@@ -149,77 +150,73 @@ socket.on('chat message', function (msg) {
 
 //================================== Screen share logics =======================
 const videoElem = document.getElementById('screen')
-screen_share.addEventListener('click',async function () {
+screen_share.addEventListener('click', async function () {
     startCapture();
 })
 
 // Options for getDisplayMedia()
 const displayMediaOptions = {
     video: {
-      cursor: "always"
+        cursor: "always"
     },
     audio: true
-  };
+};
 
-  async function startCapture() {  
+async function startCapture() {
     try {
-      videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-    //   const videoStreamTrack = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-    //   call.peerConnection.getSenders()[1].replaceTrack(videoStreamTrack)
-      dumpOptionsInfo();
+        videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        //   const videoStreamTrack = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        //   call.peerConnection.getSenders()[1].replaceTrack(videoStreamTrack)
+        dumpOptionsInfo();
     } catch (err) {
-      console.error(`Error: ${err}`);
+        console.error(`Error: ${err}`);
     }
-  }
+}
 
-  function dumpOptionsInfo() {
+function dumpOptionsInfo() {
     const videoTrack = videoElem.srcObject.getVideoTracks()[0];
-  }
-  
-  
+}
+
+
 //==============================================================================
-//==============================================================================
+//=========================== Screen record logic ===========================================
 record.addEventListener('click', async function () {
     record.style.display = 'none';
     record_stop.style.display = 'inline-block';
     let stream = await navigator.mediaDevices.getDisplayMedia({
         video: true,
         audio: true
-      })
-    
-      //needed for better browser support
-      const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") 
-                 ? "video/webm; codecs=vp9" 
-                 : "video/webm"
-        let mediaRecorder = new MediaRecorder(stream, {
-            mimeType: mime
+    })
+
+    //needed for better browser support
+    const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9")
+        ? "video/webm; codecs=vp9"
+        : "video/webm"
+    let mediaRecorder = new MediaRecorder(stream, {
+        mimeType: mime
+    })
+    let chunks = []
+    mediaRecorder.addEventListener('dataavailable', function (e) {
+        chunks.push(e.data)
+    })
+    mediaRecorder.addEventListener('stop', function () {
+        let blob = new Blob(chunks, {
+            type: chunks[0].type
         })
-        let chunks = []
-        mediaRecorder.addEventListener('dataavailable', function(e) {
-            chunks.push(e.data)
-        })
-        mediaRecorder.addEventListener('stop', function(){
-            let blob = new Blob(chunks, {
-                type: chunks[0].type
-            })
-            let url = URL.createObjectURL(blob)
-      
-            // let video = document.querySelector("video")
-            // video.src = url
-      
-            let a = document.createElement('a')
-            a.href = url
-            a.download = 'video.webm'
-            a.click()
-        })
-    
-        //we have to start the recorder manually
-        mediaRecorder.start()
+        let url = URL.createObjectURL(blob)
+
+        // let video = document.querySelector("video")
+        // video.src = url
+
+        let a = document.createElement('a')
+        a.href = url
+        a.download = 'video.webm'
+        a.click()
+    })
+
+    //we have to start the recorder manually
+    mediaRecorder.start()
 })
-
-
-
-
 record_stop.addEventListener('click', function () {
     record_stop.style.display = 'none';
     record.style.display = 'inline-block';

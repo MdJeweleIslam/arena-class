@@ -8,7 +8,7 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-    res.redirect(`/${uuidV4()}`)
+    res.redirect(`/${uuidV4()}`)/* Redirects to the specific url provided by UUID */
 })
 app.get('/:room',(req,res) =>{
     res.render('room',{ roomId: req.params.room }) /* This is comming directly from the browser url */
