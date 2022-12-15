@@ -10,7 +10,10 @@ const myVideo = document.createElement('video')
 myVideo.muted = true
 const peers = {}
 
+// Below variable is making stream global
 let videoStream
+
+// Below is getting users own video permission and showing on own browser
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
@@ -18,6 +21,7 @@ navigator.mediaDevices.getUserMedia({
     videoStream = stream
     addVideoStream(myVideo, stream)
 
+    // myPeer.on is calling the peer
     myPeer.on('call', call => {
         call.answer(stream)
         const video = document.createElement('video')
@@ -163,11 +167,22 @@ const displayMediaOptions = {
 };
 
 async function startCapture() {
+    // const screen = document.createElement('video')
     try {
         videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        // videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        
+
+        // l[0].srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+        // l[0].srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+        // l[0].addEventListener('loadedmetadata', () => {
+        //     l[0].play()
+        // })
         //   const videoStreamTrack = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
         //   call.peerConnection.getSenders()[1].replaceTrack(videoStreamTrack)
-        dumpOptionsInfo();
+
+
+        // dumpOptionsInfo();
     } catch (err) {
         console.error(`Error: ${err}`);
     }
