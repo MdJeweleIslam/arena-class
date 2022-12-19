@@ -79,7 +79,6 @@ const message_view_box = document.getElementById('message-view-box')
 
 audio.addEventListener('click', function () {
     const track = videoStream.getAudioTracks()[0].enabled
-    console.log(videoStream.getAudioTracks());
     if (track) {
         videoStream.getAudioTracks()[0].enabled = false
     }
@@ -91,7 +90,6 @@ audio.addEventListener('click', function () {
 })
 audio_mute.addEventListener('click', function () {
     const track = videoStream.getAudioTracks()[0].enabled
-    console.log(videoStream.getAudioTracks());
     if (track) {
         videoStream.getAudioTracks()[0].enabled = false
     }
@@ -103,7 +101,6 @@ audio_mute.addEventListener('click', function () {
 })
 video.addEventListener('click', function () {
     const track = videoStream.getVideoTracks()[0].enabled
-    console.log(videoStream.getVideoTracks()[0]);
     if (track) {
         videoStream.getVideoTracks()[0].enabled = false
     }
@@ -115,7 +112,6 @@ video.addEventListener('click', function () {
 })
 video_mute.addEventListener('click', function () {
     const track = videoStream.getVideoTracks()[0].enabled
-    console.log(videoStream.getVideoTracks()[0].enabled);
     if (track) {
         videoStream.getVideoTracks()[0].enabled = false
     }
@@ -153,13 +149,9 @@ socket.on('chat message', function (msg) {
 // =============================================================================
 
 //================================== Screen share logics =======================
-// const videoElem = document.getElementById('screen')
-screen_share.addEventListener('click', function () {
-    startCapture();
-})
 
 // Options for getDisplayMedia()
-const displayMediaOptions = {
+ const displayMediaOptions = {
     video: {
         cursor: "always"
     },
@@ -170,14 +162,14 @@ const displayMediaOptions = {
       }
 };
 
-async function startCapture() {
+screen_share.addEventListener('click', async function () {
     try {
         await navigator.mediaDevices.getDisplayMedia(displayMediaOptions).then(stream =>{
-            addScreenStream(myVideo, stream)
-
+            const screenVideo = document.createElement('video')
+            addScreenStream(screenVideo, stream)
             myPeer.on('call', call => {
-                call.answer(stream)
-                // const video = document.createElement('video')
+                // call.answer(stream)
+                const video = document.createElement('video')
                 call.on('stream', userVideoStream => {
                     addScreenStream(video, userVideoStream)
                 })
@@ -192,21 +184,20 @@ async function startCapture() {
             })
 
         })
-        // videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-        dumpOptionsInfo();
+        // dumpOptionsInfo();
     } catch (err) {
         console.error(`Error: ${err}`);
     }
-}
+})
 
 myPeer.on('open', id => {
     socket.emit('join-room', ROOM_ID, id)
 })
 
-function connectToNewStream(userId, stream) {
+async function connectToNewStream(userId, stream) {
     const call = myPeer.call(userId, stream)
-    // const video = document.createElement('video')
-    call.on('stream', userVideoStream => {
+    const video = document.createElement('video')
+    await call.on('stream', userVideoStream => {
         addScreenStream(video, userVideoStream)
     })
     call.on('close', () => {
@@ -216,7 +207,7 @@ function connectToNewStream(userId, stream) {
     peers[userId] = call
 }
 
-function dumpOptionsInfo() {
+ function dumpOptionsInfo() {
     const videoTrack = videoElem.srcObject.getVideoTracks()[0];
 }
 
